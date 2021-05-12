@@ -1,0 +1,24 @@
+---
+bootstrap_url: http://172.19.55.32:9090
+cluster_name: QNRCluster
+exhibitor_storage_backend: static
+log_directory: /genconf/logs
+ip_detect_public_filename: /genconf/ip-detect-public
+master_discovery: static
+telemetry_enabled: 'false'
+master_list:
+- 172.19.55.10
+agent_list:
+- 172.19.55.33
+- 172.19.55.34
+process_timeout: 120
+resolvers:
+- 8.8.8.8
+- 8.8.4.4
+process_timeout: 300
+oauth_enabled: 'true'
+ssh_key_path: /home/alireza/.ssh/id_rsa
+ssh_port: '22'
+ssh_user: alireza
+enable_ipv6: 'false'
+dcos_l4lb_enable_ipv6: 'false'
