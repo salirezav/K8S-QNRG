@@ -30,6 +30,18 @@ All the machines on our cluster run Ubuntu. Before you start make sure to run `s
 
    3. Finally `sudo ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf`
 5. Install Docker on all machines.
+6. Since DC/OS documentation and installation scripts both think you are using CentOS and not Ubuntu you will face errors in the future when attempting to install. The reason is that the location of commands like `mkdir`, `curl` and `ln` are different in Ubuntu and CentOS, and DC/OS installation script treat your machine as a CentOS machine. To prevent those errors from occuring run these commangs:
+
+```Bash
+sudo apt-get install -y libcurl3-nss ipset selinux-utils curl unzip bc &&
+sudo ln -s /bin/mkdir /usr/bin/mkdir &&
+sudo ln -s /bin/ln /usr/bin/ln &&
+sudo ln -s /bin/tar /usr/bin/tar &&
+sudo ln -s /bin/rm /usr/bin/rm &&
+sudo ln -s /usr/sbin/useradd /usr/bin/useradd &&
+sudo ln -s /bin/bash /usr/bin/bash &&
+sudo ln -s /sbin/ipset /usr/sbin/ipset
+```
 
 ## Installation Process
 
@@ -131,19 +143,24 @@ At this point your directory structure should resemble:
 
 ```
 
-5. Run the following to generate the installation files:
+5. Run the following to **generate the installation files**:
 
 ```Bash
 sudo bash dcos_generate_config.sh
 ```
 
-6. Using an enginx Docker container we will host the generated files.
+6. Using an enginx Docker container we will **host the generated files**.
 
 ```bash
 docker run -d -p 9090:80 -v $PWD/genconf/serve:/usr/share/nginx/html:ro nginx
 ```
 
 7. ssh to your master nodes.
+
+```bash
+ssh <master-ip>
+```
+
 8. make a new directory and navigate to it
 
 ```bash
@@ -160,4 +177,10 @@ curl -O http://<bootstrap-ip>:<your_port>/dcos_install.sh
 
 ```bash
 sudo bash dcos_install.sh master
+```
+
+you can repeat the same steps from 7 to 10 for your slave nodes. The only important difference is that you need to specify that the node is a slave node when running the installation script.
+
+```bash
+sudo bash dcos_install.sh slave
 ```
