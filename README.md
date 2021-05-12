@@ -182,5 +182,9 @@ sudo bash dcos_install.sh master
 you can repeat the same steps from 7 to 10 for your slave nodes. The only important difference is that you need to specify that the node is a slave node when running the installation script.
 
 ```bash
-sudo bash dcos_install.sh slave
+sudo bash dcos_install.sh slave # or <slave_public>
 ```
+
+## Log in to your DC/OS web interface
+
+Monitor the DC/OS web interface and wait for it to display at: `http://<master-node-public-ip>/`
