@@ -53,15 +53,22 @@ ssh into your bootstrap machine and:
     mkdir -p genconf
     ```
 
-2. Create an IP detection script and store it as `genconf/ip-detect-public`
+2. Create an IP detection script and store it as `genconf/ip-detect`
 
-First you need to determine your network interface name using `ifconfig`. Then copy and paste these into the `ip-detect-public` file and make sure to use your interface name:
+First you need to determine your network interface name using `ifconfig`. Then copy and paste these into the `ip-detect` file and make sure to use your interface name:
 
 ```bash
 #!/usr/bin/env bash
 set -o nounset -o errexit
 export PATH=/usr/sbin:/usr/bin:$PATH
 echo $(ip addr show your_interface_name | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)
+```
+
+also an `ip-detect-public` file is required. Create it in the `genconf` directory and paste these in it:
+```bash
+#!/usr/bin/env bash
+set -o nounset -o errexit
+echo 172.19.55.10 # the ip address of the bootstrap node (Ronon, in this case)
 ```
 
 [More information here](https://docs.d2iq.com/mesosphere/dcos/2.1/installing/production/deploying-dcos/installation/)
@@ -106,9 +113,9 @@ echo $(ip addr show your_interface_name | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9
     telemetry_enabled: 'false'
     # here you need to put the ip addresses of your desired master nodes. here I chose "Atlantis" to be the master node
     master_list:
-    - 172.19.55.10
+    - 172.19.55.10 # the ip address of Atlantis
     # same as the list of masters, here I specified Elizabeth and Rodney to be our agent nodes
-    agent_list:
+    agent_list: # the ip addresses of Elizabeth and Rodney
     - 172.19.55.33
     - 172.19.55.34
     process_timeout: 120
